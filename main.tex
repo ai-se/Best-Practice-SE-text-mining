@@ -317,24 +317,26 @@ Stemming and stop words removal are considered as an effective way to improve th
     \centering
     \subfigure[$Accuracy$]
     {
-        \includegraphics[width=\linewidth]{./fig/stem_acc.png}
+        \includegraphics[width=\linewidth]{./fig/SVM_acc.png}
         \label{fig:stem_acc}
     }
     \quad
     \subfigure[$Fscore_{M}$]
     {
-        \includegraphics[width=\linewidth]{./fig/tem_M.png}
+        \includegraphics[width=\linewidth]{./fig/SVM_M.png}
         \label{fig:stem_M}
     }
     \quad
     \subfigure[$Fscore_{\mu}$]
     {
-        \includegraphics[width=\linewidth]{./fig/tem_mu.png}
+        \includegraphics[width=\linewidth]{./fig/SVM_mu.png}
         \label{fig:stem_mu}
     }
     \caption{Stemming versus no stemming}
     \label{fig:stem}
 \end{figure}
+
+\end{document}
 
 As shown in Figure \ref{fig:stem}, stemming and stop words removal has no improvements on the performance. Therefore doing nothing, keeping the original bag of words is recommended.
 
