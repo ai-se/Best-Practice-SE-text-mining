@@ -2,6 +2,28 @@
 
 For BIGDSE ’16
 
+## Notes
+
+- Understand the relevance of SE processes for ML/Big Data
+- There has been a constant push for using ML in SE. But, what about SE for ML
+- We'd like to explore what SE can teach ML
+
+- Big data and ML practitioners have an variety of tools at their disposal, with the growing size of such requires a validation team.
+- Mythical man month - 1/2 of the time is used of testing 
+- Coding takes only 1/6th the entire time.
+
+- Industrial data mining has taught us that the significance of goal of a certain task
+- Key take way: Your goals are not my goals.
+
+### DM at LN
+- The problem is indeed unique. No dearth of data, but labeling data is quite expensive
+- Emulating real world data is hard — forum such as stack exchange can be used to address these issues.
+- TAR is primarily a binary classification task.
+- StackEx using a site level granularity produces a satisfactory analogy to the real problem in hand.
+- Binary classification of this sort is vastly different from other techniques. This enables us to take to shortcuts. 
+- These lessons are by no means general, we only endeavor to highlight the challenges in industrial data mining.
+
+
 ## Structure: feel free to modify this
 
 ### Abstract
@@ -11,9 +33,10 @@ For BIGDSE ’16
  - Description of Data
  - Related works
  
-### Method
- - Validation Decisions
- - Performance Metrics
+### Technology Assisted Review 
+ 1. My goals are not your goals.
+ 2. My data isn't your data
+ 3. Big data sometimes isn't
 
 ### Experiments
  - Best Decision
