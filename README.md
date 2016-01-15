@@ -42,6 +42,7 @@ For BIGDSE ’16
    4. Sampling - Stratified sampling, Unequal Sampling
    
  3. Big data sometimes isn't
+   1. Challenges in EDISC: See p13 of the refernce. 
 
 ### Experiments
  - Best Decision
