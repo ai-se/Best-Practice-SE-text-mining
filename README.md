@@ -51,6 +51,8 @@ For BIGDSE ’16
 ### Discusions
  - some words to justify the best decision
  - lessons learnt from this project
+ - The role of validation teams:
+   - Mining large industrial data has signification lessons that can be learnt from SE practices
  - validity threats
 
 ### Conclusion
