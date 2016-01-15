@@ -36,6 +36,11 @@ For BIGDSE ’16
 ### Technology Assisted Review 
  1. My goals are not your goals.
  2. My data isn't your data
+   1. Describe Prec/Recall and their importance
+   2. StackEx data
+   3. Prevelance
+   4. Sampling - Stratified sampling, Unequal Sampling
+   
  3. Big data sometimes isn't
 
 ### Experiments
