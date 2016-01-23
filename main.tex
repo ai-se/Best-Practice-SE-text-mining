@@ -24,6 +24,9 @@
 \titlespacing{\subsection}{0pt}{3pt}{*0}
 \titlespacing{\subsubsection}{0pt}{*0}{*0}
 % \usepackage{fullpage}
+ 
+\conferenceinfo{BIGSE}{'16 Austin, Texas USA}
+
 \begin{document}
 \pagenumbering{arabic}
 \setcopyright{acmcopyright}
@@ -32,7 +35,7 @@
 \numberofauthors{2}
 \author{
 \alignauthor
-Zhe Yu, Rahul Krishna, \\ Amritanshu Agrawal, Tim Menzies\\ %\titlenote{}\\
+Rahul Krishna,  Zhe Yu, \\ Amritanshu Agrawal, Tim Menzies\\ %\titlenote{}\\
        \affaddr{Com Sci, NC State, USA}\\
        \email{\{zyu9, rkrish11, aagrawa8, tjmenzie\}@ncsu.edu}
 % 2nd. author
@@ -49,14 +52,14 @@ Manuel Dominguez,  David Wolf \\%\titlenote{}\\
 As businesses becoming increasing reliant on big data   analytics, it becomes
 increasingly important to {\em test} the choices made within the data miners.
 This paper reports   lessons learned from  {\em BigSE}, an industrial/university
-experiment that augmented industrial activity with low-cost testing
+collaboration that augments industrial activity with low-cost testing
 of data miners (by  graduate students).  
 
 Tasked with the validation of design options selected by developers at LexisNexis, workers
 at BigSE found numerous ``standard'' choices for
-text mining that could be replaced by  simpler and less resource intensive methods. Further, that validation work also found text mining choices overlooked
-by LexisNexis that could significantly improve the performance of their
+text mining that could be replaced by  simpler and less resource intensive methods. Further, that validation work also found additional text mining choices   that could significantly improve the performance of their
 industrial data miners.
+
 \end{abstract}
 % \printccsdesc
 
@@ -64,23 +67,112 @@ industrial data miners.
 \keywords{E-Discovery,  Software Engineering, Testing}
 
 \section{Introduction}
+Much has been written about the application of data mining
+to software engineering. It is now routine to see at major SE
+conferences that a third (or more) of the papers used data miners
+to augment their analysis.
+Clearly, data mining has much to teach software engineering.
+But what about the other way around? What can software engineers teach
+data mining? What are the lessons learned from decades of SE that
+can improve data mining?
+
+In 1975, Fred Brooks noted that half the effort 
+of a software project is spent in {\em testing}. In an update
+to that book~\cite{Brooks95}, written twenty years later, Brooks still
+asserted that testing remains a large task within any project.
+Accordingly, we should expect that when industrial data mining
+providers ship analytic tools, they should conduct extensive
+testing of those tools prior to release.
+
+Certain aspects of commercial data mining tools are thoroughly tested prior to
+release (e.g. distributing tasks across
+a CPU farm or array of disk storage). However, other aspects
+are not so extensively tested. For example, 
+LexisNexis team has
+spent much time writing support tools for {\em E-discovery}, 
+which is a text mining task associated with certain kinds of
+legal actions (for more details on E-Discovery, see below).
+When LexisNexis ships E-Discovery products, those products contain
+numerous text mining {\em operators} to handle (for example)
+tokenization, featuriztion, normalization, classification, etc. 
+Once any set of operators offers any promising results,
+standard practice is to configure the text mining tool
+with those operators, then ship the resulting product.
+
+LexisNexis contacted NcState with the question ``how can
+we test if the operators we select for text mining are 
+satisfactory?''. This is a hard problem in commercial
+environment since a
+extensive exploration of  data mining operators for
+tokenization, featurization, normalization, classification, etc
+is a massive task. Having run such studies for many years~\cite{menzies2014sharing},
+we can assert that this is mostly a trial-and-error process
+with a high percentage of errors. Commercial practitioners
+are sometimes reluctant to explore this  space of option
+since the large number of negative results are not consistent
+with the commercial approach of ``Ship It! Now!'':
+\bi
+\item
+The advantage
+of ``Ship it! Now!'' is that, using it,  commercial companies can maintain
+or extend their revenue stream.
+\item
+That said, ``Ship It! Now''
+can also discourage extensive experimentation or reward  long sequences
+of negative results as data scientists try various options.
+\ei
+The trials and errors associated with exploring text mining operators
+is more suited to a research environment where persistent effort, with only occasional positive results, is more acceptable. Hence,
+LexisNexis proposed a collaboration with NcState where 
+graduate students explored around the space of text mining
+operators proposed by 
+LexisNexis engineers. The results of that collaboration have
+been most encouraging:
+\bi
+\item 
+Most  of the operator choices made by LexisNexis proved
+to be demonstrably better than many other choices.
+\item 
+But it some cases, NcState could show that certain operators
+were much faster than others (e.g. required only a single pass
+of the data);
+\item
+And in one case, NcState showed that one operator not currently
+used by LexisNexis offered large improvement in their text miners.
+That operator is now scheduled for inclusion in the next release
+of the LexisNexis tools.
+\ei
+In all the LexisNexis/NcState colloberation has been useful
+for both parties.
+LexisNexis got to explore a large range of text mining operators while
+NcState got to expose their research students to the
+realities of real-world industrial data mining.
+Based on  the results so far, LexisNexis management has extended the collaboration till the end of 2016 (and further work in 2017
+and beyond is begin discussed). 
 
 
-When software engineers do data mining they ship products, these products are comprised of several features including some intelligence. Most intelligent systems requires some tuning as there are many options for the numerous facets of data mining. The delivered product usually contains only one set of all these choices, e.g., in text mining applications, tokenize with shingling. We have observed that in industrial projects, developers do not typically take the time to explore the large space of options available to them during design. The industrial imperative to ship a product in order to create an income stream is very strong, and justifiably so. In addition to this, there is also a need for a constant push out. 
 
-Consider the standard data mining rig produced by big data methods, for example the text mining tools provided by LexisNexis. These tools come configured with certain decision made about certain aspects. In interviews with their developers we asked how much have the other options been explored. We found that they did limited experiments on small subsets of data sets to pick the best options. 
 
-In working with them we set out to establish a more rigorous validation process. While do so, we found that many of their initial decisions like Term Frequency, L2-Normalization, and Hashing trick were quite good; however, we also found some things that can be done better, for example data re-balancing with SMOTE. One exceptional finding was the efficacy of linear support vector machines over other kernels. On further investigation we understood that their text mining task was subtly different to commonly used methodologies. Hence, it is our opinion that text mining tools must be tuned for particular business tasks, and not be used as a trite "one method suits all" approach. 
+This paper documents the lessons learned from that collaboration.
+These lessons divide into {\em process} insights (comments
+on methods for organizing this kind of collaboration) and {\em technical
+insights} (comments on different operators for text mining).
+ 
 
-To tackle this issue, we propose a collaboration between teams of high-cost industrial developers and low-cost graduate students working in university laboratories. The low cost university teams can be tasked with exploring the space of available options. The support of university teams can be extend to validating the design choices made by the developers and also to recommending best design choices for a specific applications. This paper describes the validation lab we have created to verify their current methods while also exploring avenues for future work. We'd like to offer some valuable lessons we have learned as a result of our collaboration to other organizations for partnership with universities:
+
+
+\section{About the Domain: E-Discovery}
+ 
+\section{Process Lessons}
 
 \bi
 \item In order to protect privacy and the intellectual property, it is imperative that a non-disclosure agreement be signed.
 \item Organize regular meetings.
 \item A managed portfolio of the project, decomposed into a set of high risk and low risk tasks. The low risk tasks are designed to generate actionable results every week, this fuels the possibility of exploring risky tasks on a longer term. Often times such projects are subject to critical audits in an effort to amortise the company's expenditure. Therefore, it is important to have short term goals on the table, so that at any time this project can survive the critical audit. 
 \item Negotiate an exemplary data set from the client prior to the start of the project. Understanding the nature of data sets expedites the process of choosing the best options, for more details see \tion{ydinmd}.
-\item An extensive validation requires several repeats to establish the confidence interval of prediction accuracies. This can be greatly expedited by making use HPC systems. For more details see \tion{Discussion}.
+\item An extensive validation requires several repeats to establish the confidence interval of prediction accuracies. This can be greatly expedited by making use HPC systems. For more details see
 \ei
+\section{Discussion}.
 
 We would like to highlight that above lessons might not work for all applications. However, we hope that the other validation teams can use these lessons to device methodologies establish the best practice for their application. 
 
@@ -500,6 +592,10 @@ There are several validity threats to the design of this study.
 
 \section{Conclusions}
 \label{sect:Conclusions}
+
+
+
+
 
 
  
