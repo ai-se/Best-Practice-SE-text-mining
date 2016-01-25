@@ -22,10 +22,10 @@
 \usepackage[compact]{titlesec}
 \titlespacing{\section}{0pt}{5pt}{*0}
 \titlespacing{\subsection}{0pt}{3pt}{*0}
-\titlespacing{\subsubsection}{0pt}{*0}{*0}
+\titlespacing{\subsubsection}{0pt}{2pt}{*0}
 % \usepackage{fullpage}
  
-\conferenceinfo{BIGSE}{'16 Austin, Texas USA}
+\conferenceinfo{BIGDSE}{'16 Austin, Texas USA}
 
 \begin{document}
 \pagenumbering{arabic}
@@ -51,14 +51,16 @@ Manuel Dominguez,  David Wolf \\%\titlenote{}\\
 
 As businesses becoming increasing reliant on big data   analytics, it becomes
 increasingly important to {\em test} the choices made within the data miners.
-This paper reports   lessons learned from  {\em BigSE}, an industrial/university
+This paper reports   lessons learned from the  {\em BigSE Lab}, an industrial/university
 collaboration that augments industrial activity with low-cost testing
 of data miners (by  graduate students).  
 
 Tasked with the validation of design options selected by developers at LexisNexis, workers
-at BigSE found numerous ``standard'' choices for
+at the BigSE Lab found numerous ``standard'' choices for
 text mining that could be replaced by  simpler and less resource intensive methods. Further, that validation work also found additional text mining choices   that could significantly improve the performance of their
 industrial data miners.
+
+Based on the above, we conclude that the BigSE model is a useful approach for university/industry collaboration.
 
 \end{abstract}
 % \printccsdesc
@@ -67,31 +69,15 @@ industrial data miners.
 \keywords{E-Discovery,  Software Engineering, Testing}
 
 \section{Introduction}
-Much has been written about the application of data mining
-to software engineering. It is now routine to see at major SE
-conferences that a third (or more) of the papers used data miners
-to augment their analysis.
-Clearly, data mining has much to teach software engineering.
-But what about the other way around? What can software engineers teach
-data mining? What are the lessons learned from decades of SE that
-can improve data mining?
 
-In 1975, Fred Brooks noted that half the effort 
-of a software project is spent in {\em testing}. In an update
-to that book~\cite{Brooks95}, written twenty years later, Brooks still
-asserted that testing remains a large task within any project.
-Accordingly, we should expect that when industrial data mining
-providers ship analytic tools, they should conduct extensive
-testing of those tools prior to release.
-
-Certain aspects of commercial data mining tools are thoroughly tested prior to
+Some parts of commercial data mining tools are thoroughly tested prior to
 release (e.g. distributing tasks across
-a CPU farm or array of disk storage). However, other aspects
-are not so extensively tested. For example, 
-LexisNexis team has
-spent much time writing support tools for {\em E-discovery}, 
-which is a text mining task associated with certain kinds of
-legal actions (for more details on E-Discovery, see below).
+a CPU farm or array of disk storage). However, other parts
+may not be so extensively explored. For example, 
+LexisNexis  is an international commercial company that offers
+BigData solutions to clinets. LexisNexis has
+spent much time writing support tools for the {\em E-discovery} (discussed
+in the next section).  
 When LexisNexis ships E-Discovery products, those products contain
 numerous text mining {\em operators} to handle (for example)
 tokenization, featuriztion, normalization, classification, etc. 
@@ -101,7 +87,7 @@ with those operators, then ship the resulting product.
 
 LexisNexis contacted NcState with the question ``how can
 we test if the operators we select for text mining are 
-satisfactory?''. This is a hard problem in commercial
+satisfactory?''. This is a tricky problem in commercial
 environment since a
 extensive exploration of  data mining operators for
 tokenization, featurization, normalization, classification, etc
@@ -123,37 +109,16 @@ of negative results as data scientists try various options.
 \ei
 The trials and errors associated with exploring text mining operators
 is more suited to a research environment where persistent effort, with only occasional positive results, is more acceptable. Hence,
-LexisNexis proposed a collaboration with NcState where 
-graduate students explored around the space of text mining
+LexisNexis and NcState jointly created the {\em BigSE Lab}  where
+university graduate students explore    the space of text mining
 operators proposed by 
-LexisNexis engineers. The results of that collaboration have
-been most encouraging:
-\bi
-\item 
-Most  of the operator choices made by LexisNexis proved
-to be demonstrably better than many other choices.
-\item 
-But it some cases, NcState could show that certain operators
-were much faster than others (e.g. required only a single pass
-of the data);
-\item
-And in one case, NcState showed that one operator not currently
-used by LexisNexis offered large improvement in their text miners.
-That operator is now scheduled for inclusion in the next release
-of the LexisNexis tools.
-\ei
-In all the LexisNexis/NcState colloberation has been useful
-for both parties.
-LexisNexis got to explore a large range of text mining operators while
-NcState got to expose their research students to the
-realities of real-world industrial data mining.
-Based on  the results so far, LexisNexis management has extended the collaboration till the end of 2016 (and further work in 2017
-and beyond is begin discussed). 
+industrial engineers. 
 
 
 
 
-This paper documents the lessons learned from that collaboration.
+
+This paper documents the lessons learned from the BigSE project. 
 These lessons divide into {\em process} insights (comments
 on methods for organizing this kind of collaboration) and {\em technical
 insights} (comments on different operators for text mining).
@@ -162,90 +127,157 @@ insights} (comments on different operators for text mining).
 
 
 \section{About the Domain: E-Discovery}
- 
+
+The specific  task explored in this work was {\em E-Discovery}.
+  E-discovery is part of  civil litigation where one party (the producing party), offers up   materials which are pertinent to legal case, makes available to the other (requesting party).
+  Upon reception of a request, it is the duty of the producing party to make an inquiry to find all reasonably relevant materials in their possession and turn them over to the requesting party.
+  In the case of a modern company, this means searching through (say)
+  $10^8$ emails to find the $10^3$ emails that are most relevant to the case at hand.
+  
+This process is extensively monitored by both sides in the litigation,
+as well as the judges overseeing the process. Companies can be heavily sanctioned if
+they fail to produce enough relevant documents, or if they do not respond in a timely
+manner. If our part is perceived to be working in bad faith during this process
+(e.g. burying the other side with too many irrelevant documents), then this
+can result in court sanctions. Hence, there is much commercial interest in 
+E-Discovery tools that are thorough and cost-effective.
+
+Initially, discovery was a mostly manual process s conducted by teams of attorneys. 
+Team members would laboriously read through all the documents, marking them as important or otherwise with tags based on the document's responsiveness to the request. This method of search is now known as \textit{linear review}. 
+The time required for linear  review depended on several factors relating to document
+collection, requests, and reviewer time. The typical review rate was a few minutes per document. As is to be expected, with the growth in size of the collection, such a review process becomes more and more insupportable. To remedy this issue a higher degree of automation is to be adopted and these methods are now referred to as \textit{technology-assisted review (TAR)}.
+%
+The  nuanced process of e-discovery is summarized  by a widely-cited   EDRM Reference Model\footnote{http://www.edrm.net/resources/edrm-stages-explained}.  Starting from ``Information management'', where the intent is to incorporate all the information processing that is required by the organization before the e-discovery process starts, to ``Presentation'' on the right, which involves the production of the discovered materials to support a legal analysis. 
+
+The LexisNexis experience is that
+``Document search'' represents 60 to 80\% of the total  cost. Hence, this
+work focused on improving that search capability. 
+
+
 \section{Process Lessons}
 
+In order to explore E-Discovery, BigSE made numerous useful technical findings about Big Data, text mining,
+and E-Discovery. Those findings are presented later in this paper.
+
+Those findings were made possible by certain process decisions that guided
+the day-to-day operation of the lab. This section discusses those process decisions. 
+
+
+
+\subsection{Hardware}
+ NcState devotes considerable resources to Big Data infrastructure. 
+BigSE students run their experiments on the   NcState
+High Performance Computing facility (HPC is a network of 10,000 machines with 2 to 8 cores on each).
+A standard run for us is a 10 times repeat cross-validation experiment where data
+5 variants of a learner are run over 16 data sets. Depending on how large
+is the data and how slow is the learner, such a run can take hours to days to 
+terminate on a single machine.  However, on HPC, that same run terminate in times
+as short as 30 minutes.
+
+Currently, we are running the HPC jobs using a standard batch controller (without any
+Hadoop), but we are
+working on provisioning HPC with Spark.
+
+\subsection{A ``Mock'' Data Generator}
+An important process decision made early in the project was to ask
+LexisNexis to provide a ``mock'' data generator  that generates multiple data sets
+representing the kinds of data they see in their industrial practice.
+In order to emulate legal emails, LexisNexis build a ``mock'' using Stackoverflow.com
+data. Given a random number seed, this ``mock'' can build data containing the attribute
+and class distributions seen in current LexisNexis E-Discovery work.
+
+The importance of the ``mock'' was three-fold. Firstly, it gave NcState ready access to large
+numbers of data sets. Secondly, when we reported results, it gave LexisNexis confidence
+that those kinds of methods would work on their kind of data.
+
+Thirdly, the LexisNexis ``mock'' taught  NcState about the unique features of
+the problems faced during E-Discovery. 
+There are notable differences between E-Discovery and other information retrieval tasks, chief among these is the need for a different approach to selecting which documents should be judged for relevance. This process still required some amount of human intelligence, according to Baron et al.~\cite{baron2006trec} the report review rates for different topics at the TREC 2006 Legal Track ranged from 12.3 to 67.5 documents per hour, and averaging 24.7. In 2007, the average review rate was around 20 documents per hour, and around 21.5 per hour in 2008~\cite{oard08}. Roitblat et al.~\cite{roitblat} reported that for a large-scale review, 225 attorneys were required to each work nearly 2,000 hours to review 1.6 million documents, at a rate of 14.8 documents per hour. Borden~\cite{borden} cites a review of ``fairly technical'' documents running at the rate of 45 documents per hour, and states 50 to 60 documents per hour as the ``e-discovery industry average.'' It is therefore obvious that as the collection size increases it is not practical to assess every document for it relevance. Besides the arduous task of assessing millions of documents, it is also not a cost effective process, our industrial partners at LexisNexis report that attorneys are paid \$5 for every document they review. As a result, in e-discovery practitioners usually work with a very small subset of the original collection. Even though the number of documents in the collection is large, the TAR process uses only a small subset of labeled documents for training. In addition to this, the prevalence of responsive documents in a corpus is extremely low (ranges from 2\% to 5\%).
+It is therefore necessary to negotiate an exemplary data set generator from a
+client prior to the start of the project.  
+\subsection{Other Management Details}
+
+\subsubsection{Nondisclosure Agreement}
+
+All students and faculty involved in BigSE
+ sign non-disclosure agreements with LexisNexis. The particular NDA used
+ here was not particularly restrictive. Researchers at NcState agreed not to share confidential
+ information gained from LexisNexis as well as being somewhat circumspect in their publications
+ (e.g. showing LexisNexis engineers drafts of any paper and asking for comments and/or
+ corrections).    In return, NcState agreed to base all their analysis of   publicly
+ available data sets and tools, shared with LexisNexis engineers in private Github repositories. 
+ 
+ \subsubsection{Use of Github}
+ 
+The Github repositories proved useful in several  ways:
 \bi
-\item In order to protect privacy and the intellectual property, it is imperative that a non-disclosure agreement be signed.
-\item Organize regular meetings.
-\item A managed portfolio of the project, decomposed into a set of high risk and low risk tasks. The low risk tasks are designed to generate actionable results every week, this fuels the possibility of exploring risky tasks on a longer term. Often times such projects are subject to critical audits in an effort to amortise the company's expenditure. Therefore, it is important to have short term goals on the table, so that at any time this project can survive the critical audit. 
-\item Negotiate an exemplary data set from the client prior to the start of the project. Understanding the nature of data sets expedites the process of choosing the best options, for more details see \tion{ydinmd}.
-\item An extensive validation requires several repeats to establish the confidence interval of prediction accuracies. This can be greatly expedited by making use HPC systems. For more details see
-\ei
-\section{Discussion}.
+\item
+ LexisNexis  engineers have immediate and ready access to 
+ any interesting methods created by NcState. 
+\item
+Rather than wasting time writing Powerpoint slides, NcState students could
+report their results using the Markdown tools within the Github issue
+report systems
+\item LexisNexis developers could monitor and give very
+quick feedback on the NcState code and issues,
+as they arose.
+\item
+LexisNexis could see consistent effort on the part on NcState. SeLAB members
+are urged to do all their planning and coding and task management in Github.
+This gives LexisNexis an accurate appreciate for all the work conducted
+by the grduate students.
 
-We would like to highlight that above lessons might not work for all applications. However, we hope that the other validation teams can use these lessons to device methodologies establish the best practice for their application. 
-
-% \begin{figure*}[t!]
-% \centering
-%   \includegraphics[width=0.7\linewidth]{./fig/EDRM-Chart_v3}
-%   \caption{The Electronic Data Reference Model.}
-%   \label{fig:edrm}
-% \end{figure*}
-
-
-\section{Motivation}
-Over the past decade the use of data mining principles in software engineering has increased sharply. Examples include mining software repositories and data guided software analytics. In this work we aim to explore the relevance of lessons learned from software engineering practices when applied to better industrial data mining. To highlight this, we use the e-discovery process at LexisNexis as a case study. E-Discovery generally refers to the process by which electronically stored information pertinent to some matter, which in our context is the subject of a civil litigation, is extracted. This being an emerging field, it is our belief that lessons learned from decades of software engineering research can be leveraged to improve this process.
-
-\subsection{E-Discovery at LexisNexis}
-\label{sect:edisc}
-The chief venue for E-discovery is in civil litigation whereby one party (the producing party), in possession of materials which are pertinent to legal case, makes available to the other (requesting party). Upon reception of a request, it is the duty of the producing party to make an inquiry to find all reasonably relevant materials in their possession and turn them over to the requesting party.
-             
-Initially, this review process was conducted by a group of attorneys. They read through all the documents one at a time and marking them as important or otherwise with tags based on the document's responsiveness to the request. This method of search is now known as \textit{linear review}. The rate of review depended on several factors collection, requests, and reviewers. The typical review rate was a few minutes per document~\cite{}. As is to be expected, with the growth in size of the collection, such a review process becomes more and more insupportable. To remedy this issue a higher degree of automation is to be adopted and these methods are now referred to as \textit{technology-assisted review (TAR)}.
-%
-The complex and nuanced process of e-discovery is summarized rather elegantly by a widely cited process model, known as the EDRM Reference Model. This model encompasses all the steps involved in an e-discovery process. Starting from "Information management" at the left, where the intent is to incorporate all the information processing that is required by the organization before the e-discovery process starts, to "Presentation" on the right, which involves the production of the discovered materials to support a legal analysis.
-
-Our perspective in much narrower than that of the EDRM model, the principal focus of this paper is the fourth stage of this process. This stage comprises of three functions: Processing, Review, and Analysis. In the context of Technology-assisted Review, these functions can be interpreted as follows:
-\bi
-    \item \textit{Processing: } Involves feature generation and indexing of the available data set.
-    \item \textit{Review: } Involves specification of sample documents with some human expertise in order to train the classifiers to perform automated classification.
-    \item \textit{Analysis: } A form of formative assessment to evaluate the responsiveness of the classifier.
 \ei
 
-At the outset, TAR might seem to be a relatively straight forward task considering the advances in natural language processing and the number of machine learning tools at the disposal of the practitioner. However, the sheer number to available methodologies also makes it difficult to choose the right set of tools. 
+ \subsubsection{Staffing and Training}
+To start-up the lab  BigSE, LexisNexis funded several graduate students for one year. Also,
+LexisNexis engineers gave talks at NcState graduate recruitment days (and to
+the graduate seminar series). From those talks, several other non-paid graduate students
+joined the project as part of their research hours subjects. In all, BigSE is
+now staffed by six graduate Ph.D. students who sit in adjacent cubicles and who
+ share their coding tools and tricks. 
+ 
 
-The adversarial nature of litigation necessitates the need for rigorous validation of the obtained results in order to provide some assurance that software developed performs to the specified level of confidence and within its designed parameters and defined requirements. Undertaking such validation requires a closer understanding of the problem. 
+ 
+Newcomers to BigSE given some analysis task
+ that the team has previously completed and asked to ``reproduce this''. For
+ that initial study, they have access to all prior code written by the team
+ and their challenge is to understand the parts and assemble them into some working
+ whole. 
+ 
+ \subsubsection{Schedule and Tasks}
+ LexisNexis and NcState meet each week to present results. That meeting includes
+a round robin session where each graduate student is asked to show some results,
+or say ``pass''. This session imposes some peer pressure on the students to achieve
+results in order to ``show off'' in front of their peers and in front of the
+LexisNexis engineers. Not every student is expected to have something to show each week,
+but it becomes abundantly  clear within the overall team if some student is ``passing'' all
+the time.
+ 
+As to specific tasks, gradaute students are assigned a mix of projects. Some are very short-term (e.g a one week
+study on the merits of TF*IDF vs shingling) and some are more medium to long-term
+that can take weeks to months (e.g. literature reviews on entity recognition or
+active learning experiments). 
 
-\subsection{Your goals are not my goals}
-The goals of e-discovery are unique and unlike several other classification problems in information retrieval. For instance, the problem of determining whether some document is responsive to a request is a binary classification problem for the simple reason that in the end, the document must either be determined to be responsive (and thus to be considered for production) or not to be responsive. 
+Initially, to build trust between LexisNexis and NcState, the focus of the work was on very
+short term deliverables (weekly incremental reports). Now, the focus has changed and
+LexisNexis is prepared to discuss longer-term projects that might take months (or even
+years) to complete. 
 
-Binary classification tasks are rather straight forward. However, upon reflecting on the nature of the problem being addressed, it is clear that E-discovery applications presents practitioners with some unique challenges: 
-\be
-\item  E-discovery emphasizes on absolute result sets instead of the conventional ranked retrieval; 
-\item  In contrast to the high-precision focus of many end-user applications, such as Web search, e-discovery places great emphasis on achieving equally high recall.
-\item  In addition to relative effectiveness of the the e-discovery process, evaluation strategies also stress on the absolute effectiveness. 
-\item  E-discovery is a confluence of information retrieval and techniques from other fields (for instance, software engineering, computer forensics and document management); 
-\ee
-
-Indeed these challenges are not unique to e-discovery, neither are the proposed solutions. It is therefore critical to understand the goals and explore solutions accordingly.
-
-\subsection{Stack Exchange}
-Collections of Enron e-mails are perfect candidates for e-discovery process, they have been extensively used by e-discovery firms for several years~\cite{oard2013}. However, there doesn't seem to be a ``single'' Enron e-mail collection. As a result most results are not reproducible or comparable. We have therefore resorted to using the threads from various StackExchange sites\footnote{https://archive.org/details/stackexchange} for our experiments. The nature of StackExchange threads to mimic the unstructured textual nature e-mail threads was found to be very beneficial. The use of threads as units of retrieval has been reported in~\cite{elsayed08}.
-
-Much focus on mining stack exchange data has been on multiclass tag prediction within stack exchange sites. However, the e-discovery at LexisNexis as described in \tion{edisc} is best modeled as a binary classification task. This requires that the stack exchange threads be processed accordingly. 
-
-\subsection{Your data is not my data}
-\label{sect:ydinmd}
-The task of assessing a large collection electronically stored data is an expensive endeavor. Therefore it would be beneficial to be able to measure the performance of several systems on a common benchmark data set. In addition to this, it is crucial that we be able to replicate results obtained previously as closely as possible. An effective e-discovery collection is characterized by three core components -- reusability, comparability, and reproducibility. The test collection is tagged with descriptors to help identify the relevance of the documents retrieved from the collection. 
-
-\begin{figure}[pbt]
-    \includegraphics[width=0.99\linewidth]{./fig/pre.eps}
-    \caption{Class distribution}
-    \label{fig:token}
-\end{figure}
-
-There is ample literature on creation of test collection and information retrieval~\cite{sanderson2010test}. However, our focus here is on matters pertaining to e-discovery. There are notable differences between e-discovery and other information retrieval tasks, chief among these is the need for a different approach to selecting which documents should be judged for relevance. This process still required some amount of human intelligence, according to Baron et al.~\cite{baron2006trec} the report review rates for different topics at the TREC 2006 Legal Track ranged from 12.3 to 67.5 documents per hour, and averaging 24.7. In 2007, the average review rate was around 20 documents per hour, and around 21.5 per hour in 2008~\cite{oard08}. Roitblat et al.~\cite{roitblat} reported that for a large-scale review, 225 attorneys were required to each work nearly 2,000 hours to review 1.6 million documents, at a rate of 14.8 documents per hour. Borden~\cite{borden} cites a review of ``fairly technical'' documents running at the rate of 45 documents per hour, and states 50 to 60 documents per hour as the ``e-discovery industry average.'' It is therefore obvious that as the collection size increases it is not practical to assess every document for it relevance. Besides the arduous task of assessing millions of documents, it is also not a cost effective process, our industrial partners at LexisNexis report that attorneys are paid \$5 for every document they review. As a result, in e-discovery practitioners usually work with a very small subset of the original collection. Even though the number of documents in the collection is large, the TAR process uses only a small subset of labeled documents for training. In addition to this, the prevalence of responsive documents in a corpus is extremely low. It ranges from 2\% to 5\%. 
-
-It is therefore necessary to negotiate an exemplary data set from the client prior to the start of the project. Such representative collection is very useful to understand the right options to explore. To understand the importance of this consider Figure~\ref{fig:token} which shows the impact of tokenization on several data sets. The image contains results on 2 groups of data sets, the first half contains results of tag prediction within sites where as the second half of the data sets show site prediction. Notice how even for simple preprocessing techniques like tokeniztion there are vast differences between the two data sets.
-
-
-\subsection{What can SE teach Big Data?}
-% Over the past decade the use of data mining principles in software engineering has increased sharply. In this work we ask what lessons can be learned from software engineering practices to better industrial data mining in the form of e-discovery. The relevance of this question can be justified by looking at the market for vendors of e-discovery systems, et. al \cite{} estimate this at \$US 1 billion in 2010. Additionally, several times this figure is spent on the staffing and processing costs to use the systems effectively \cite{}[108]. From a software engineering perspective, effective usage of e-discovery depends on two goals: (1) Enhancing the effectiveness of the system for some level of human effort, thereby increasing the return on investment, and (2) Minimizing costs. Furthermore, these fundamental technologies developed for e-discovery may have applications in other fields as well. For example, the preparation of systematic reviews of recent research on specific topics in medicine might benefit from advances in high-recall search [67], and personal information management might benefit from advances in search technology that focus specifically on e-mail (which at present is of particular interest in operational e-discovery settings).
-The relevance of Software engineering principles can be justified by looking at the market for vendors of e-discovery systems, et. al \cite{} estimate this at \$US 1 billion in 2010. Additionally, several times this figure is spent on the staffing and processing costs to use the systems effectively \cite{}. From a software engineering perspective, effective usage of e-discovery depends on two goals: (1) Enhancing the effectiveness of the system for some level of human effort, thereby increasing the return on investment, and (2) Minimizing costs. 
-
-Brook's law: half the time spent in testing. It is not sufficient to use these data miners once, we need a validation rig. Systems stuff for validation purposes. Leveraging the power of HPC at NC State.
-
-Further, these fundamental technologies developed for e- discovery may have applications in other fields as well. For example, the preparation of systematic reviews of recent research on specific topics in medicine might benefit from advances in high-recall search [67], and personal information management might benefit from advances in search technology that focus specifically on e-mail (which at present is of particular interest in operational e-discovery settings).
+\subsubsection{Preparing for  ``Critical Audits''}
+This ``portfolio'' approach  that combines short low-risk tasks with longer high-risk tasks is useful management trick for speculative projects.
+In commercial endeavors, every so often, projects receive a critical  ``audit''  where engineers have to
+occasionally prove their worth to a (perhaps) critical audience that is eager  to cut
+expenses.  So far,
+there have been no critical audits of the BigSE project, but it is always
+best to be prepared. Ensuring a continual supply of conclusions (from the short-term projects),
+is one way to increase the odds of surviving the critical audit.
+ 
+ 
+  
+  
+There is ample literature on creation of test collection and information retrieval~\cite{sanderson2010test}. However, our focus here is on matters pertaining to e-discovery. 
+ 
 
 
 \section{Test Collection}
@@ -592,6 +624,62 @@ There are several validity threats to the design of this study.
 
 \section{Conclusions}
 \label{sect:Conclusions}
+
+Much has been written about the application of data mining
+to software engineering. It is now routine to see at major SE
+conferences that a third (or more) of the papers used data miners
+to augment their analysis.
+Clearly, data mining has much to teach software engineering.
+But what about the other way around? What can software engineers teach
+data mining? What are the lessons learned from decades of SE that
+can improve data mining?
+
+In 1975, Fred Brooks noted that half the effort 
+of a software project is spent in {\em testing}. In an update
+to that book~\cite{Brooks95}, written twenty years later, Brooks still
+asserted that testing remains a large task within any project.
+Accordingly, we should expect that when industrial data mining
+providers ship analytic tools, they should conduct extensive
+testing of those tools prior to release.
+
+As mentioned in the introduction, not all parts of commercial data mining
+tools may be thoroughly tested. Specifically, the hunt for best
+operators for tokenization,  featuriztion,  normalization,classification, etc
+may terminate early (especially when market pressures 
+encourage developers to ``Ship it! Now!''). One solution to
+this issue is for industrial organizations to team with universities.
+In such teams, graduate students can explore around the space of
+operators currently proposed by their industrial partners. 
+
+This paper has listed the lessons learned from one such partnership.
+The LexisNexis/NcState BigSE lab has found that:
+\bi
+\item 
+Most  of the operator choices made by LexisNexis are
+  demonstrably better than many other choices.
+\item 
+But it some cases, NcState found     certain operators
+were much faster than others (e.g. required only a single pass
+of the data);
+\item
+And in one case, NcState showed that one operator (SMOTE) not currently
+used by LexisNexis offered large improvement in their text miners.
+SMOTE is now scheduled for inclusion in the next release
+of the LexisNexis tools.
+\ei
+Overall the LexisNexis/NcState collaboration has been useful
+for both parties.
+LexisNexis got to explore a large range of text mining operators while
+NcState got to expose their research students to the
+realities of real-world industrial data mining.
+ Further, BigSE has proved to be a pathway from
+research to employment (e.g. SeLAB  students  will work as    summer interns at  LexisNexis). 
+
+Based on  these results, LexisNexis management has extended the collaboration till the end of 2016 (and further work in 2017
+and beyond is begin discussed).
+
+
+
 
 
 
