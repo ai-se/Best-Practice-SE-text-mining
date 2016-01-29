@@ -2,6 +2,8 @@
 \usepackage{graphicx}
 \usepackage{subfigure}
 \usepackage{times}
+\usepackage{url}
+\usepackage{cite}
 \usepackage{balance}
 \newcommand{\bi}{\begin{itemize*}}
 \newcommand{\ei}{\end{itemize*}}
@@ -12,7 +14,7 @@
 \newcommand{\eq}[1]{Equation~\ref{eq:#1}}
 \usepackage{mathptmx} \usepackage[scaled=.90]{helvet} \usepackage{courier}
 \setlength{\parskip}{0pt}
-\setlength{\parsep}{0pt}
+%\setlength{\passp}{0pt}
 %\setlength{\headsep}{0pt}
 %\setlength{\topskip}{0pt}
 %\setlength{\topmargin}{0pt}
@@ -46,8 +48,8 @@
 \newcommand\thmbox[1]{%
   \noindent\begin{tikzpicture}%
   \node [thmbox] (box){%
-    \begin{minipage}{.94\textwidth}%
-      #1%
+\begin{minipage}{.94\textwidth}%    
+      \vspace{-3mm}#1\vspace{-3mm}%
     \end{minipage}%
   };%
   \end{tikzpicture}}
@@ -71,7 +73,7 @@
 \alignauthor
 Rahul Krishna,  Zhe Yu, \\ Amritanshu Agrawal, Tim Menzies\\ %\titlenote{}\\
        \affaddr{Com Sci, NC State, USA}\\
-       \email{\{zyu9, rkrish11, aagrawa8, tjmenzie\}@ncsu.edu}
+       \email{\{ rkrish11, zyu9, aagrawa8, tjmenzie\}@ncsu.edu}
 % 2nd. author
 \alignauthor
 Manuel Dominguez,  David Wolf \\%\titlenote{}\\
@@ -79,11 +81,10 @@ Manuel Dominguez,  David Wolf \\%\titlenote{}\\
        \email{\{manuel.dominguez, david.wolf\}@lexisnexis.com}
 }
 \maketitle
-
-
+ 
 \begin{abstract}
 
-As businesses becoming increasing reliant on big data   analytics, it becomes
+As businesses become increasingly reliant on big data   analytics, it becomes
 increasingly important to {\em test} the choices made within the data miners.
 This paper reports   lessons learned from the  {\em BigSE Lab}, an industrial/university
 collaboration that augments industrial activity with low-cost testing
@@ -99,8 +100,7 @@ of data miners (by  graduate students).
 
 The results so far are encouraging. Students
 at  BigSE Lab have found numerous ``standard'' choices for
-text mining that could be replaced by  simpler and less resource intensive methods. Further, that   work also found additional text mining choices   that could significantly improve the performance of their
-industrial data miners.
+text mining that could be replaced by  simpler and less resource intensive methods. Further, that work also found additional text mining choices that could significantly improve the performance of   industrial data miners.
  
 
 {\bf KEYWORDS:}
@@ -117,10 +117,10 @@ Much has been written about the application of data mining
 to software engineering. It is now routine to see at major SE
 conferences that a third (or more) of the papers used data miners
 to augment their analysis.
-Clearly, data mining has much to teach software engineering.
-But what about the other way around? What can software engineers teach
+Clearly, data mining has much to teach software engineering, but what about the other way around? What can software engineers teach
 data mining? What are the lessons learned from decades of SE that
 can improve data mining?
+
 
 In 1975, Fred Brooks noted that half the effort 
 of a software project is spent in {\em testing}. In an update
@@ -136,40 +136,36 @@ release (e.g. distributing tasks across
 a CPU farm or array of disk storage). However, other parts
 may not be so extensively explored. For example, 
 LexisNexis  is an international commercial company that offers
-BigData solutions to clinets. LexisNexis has
-spent much time writing support tools for the {\em E-discovery} (discussed
+Big Data solutions to clients. LexisNexis has
+invested time writing support and mining tools to assist with {\em E-discovery} (discussed
 in the next section).  
 When LexisNexis ships E-Discovery products, those products contain
 numerous text mining {\em operators} to handle (for example)
-tokenization, featuriztion, normalization, classification, etc. 
-Once any set of operators offers any promising results,
+tokenization, featurization, normalization, classification, etc. 
+Once a set of operators offers promising results,
 standard practice is to configure the text mining tool
 with those operators, then ship the resulting product.
 
-LexisNexis contacted NcState with the question ``how can
-we test if the operators we select for text mining are 
-satisfactory?''. This is a tricky problem in commercial
-environment since a
-extensive exploration of  data mining operators for
-tokenization, featurization, normalization, classification, etc
+LexisNexis contacted NcState with the question of ``how can
+we validate if the operators we select for text mining are 
+satisfactory?''. This is a tricky problem in a commercial
+environment since an extensive exploration of  data mining operators for
+tokenization, featurization, normalization, classification, etc.
 is a massive task. Having run such studies for many years~\cite{menzies2014sharing},
 we can assert that this is mostly a trial-and-error process
-with a high percentage of errors. Commercial practitioners
-are sometimes reluctant to explore this  space of option
-since the large number of negative results are not consistent
-with the commercial approach of ``Ship It! Now!'':
+with a high percentage of errors. Commercial practitioners, responding to market pressures, may not be willing to explore this  space of option
+since the large numbers of negative results are not consistent
+with an approach that quickly delivers incremental value to the market:
 \bi
 \item
 The advantage
-of ``Ship it! Now!'' is that, using it,  commercial companies can maintain
-or extend their revenue stream.
+of this approach is that, using it,  commercial companies can maintain or extend their revenue stream.
 \item
-That said, ``Ship It! Now''
-can also discourage extensive experimentation or reward  long sequences
-of negative results as data scientists try various options.
+That said, it discourages extensive experimentation, and doesn't reward  long sequences of negative results as data scientists try various options.
 \ei
+
 The trials and errors associated with exploring text mining operators
-is more suited to a research environment where persistent effort, with only occasional positive results, is more acceptable. Hence,
+are more suited to a research environment where persistent effort, with only occasional positive results, is more acceptable. Hence,
 LexisNexis and NcState jointly created the {\em BigSE Lab}  where
 university graduate students explore    the space of text mining
 operators proposed by 
@@ -197,26 +193,41 @@ insights} (comments on different operators for text mining).
 \section{About the Domain: E-Discovery}
 
 The specific  task explored in this work was {\em E-Discovery}.
-  E-discovery is part of  civil litigation where one party (the producing party), offers up   materials which are pertinent to legal case, makes available to the other (requesting party).
-  Upon reception of a request, it is the duty of the producing party to make an inquiry to find all reasonably relevant materials in their possession and turn them over to the requesting party.
-  In the case of a modern company, this means searching through (say)
-  $10^8$ emails to find the $10^3$ emails that are most relevant to the case at hand.
+E-Discovery is part of  civil litigation where one party (the producing party), offers up   materials which are pertinent to a  legal case. The producing party makes the materials available to a requesting party.
+Upon reception of a request, it is the duty of the producing party to make an inquiry to find all reasonably relevant materials in their possession and turn them over to the requesting party.
+In the case of a modern company, this may mean searching through 
+millions emails to find (say) $100$ emails that are most relevant to the case at hand.
   
-This process is extensively monitored by both sides in the litigation,
+This process is extensively monitored by both sides involved in the litigation,
 as well as the judges overseeing the process. Companies can be heavily sanctioned if
-they fail to produce enough relevant documents, or if they do not respond in a timely
-manner. If our part is perceived to be working in bad faith during this process
-(e.g. burying the other side with too many irrelevant documents), then this
+they fail to conduct a reasonable search in good faith, or if they do not respond in a timely
+manner\footnote{\url{https://www.law.cornell.edu/rules/frcp/rule_26}}. If the producing party is perceived to be working in bad faith during this process, then this
 can result in court sanctions. Hence, there is much commercial interest in 
-E-Discovery tools that are thorough and cost-effective.
+E-Discovery tools that  are thorough and discourage over-use, misuse,   or abuse of procedural tools that increase cost and result in delay.
 
-Initially, discovery was a mostly manual process s conducted by teams of attorneys. 
-Team members would laboriously read through all the documents, marking them as important or otherwise with tags based on the document's responsiveness to the request. This method of search is now known as \textit{linear review}. 
+\begin{comment}
+TIMM: COVERED!
+Manny: "burying the other side with paper" or "over producing" is a rare thing these days.  See the FRCP Rule 1 and  Committee note:  
+Rule 1 is amended to emphasize that just as the court should construe and administer these rules to secure the just, speedy, and inexpensive determination of every action, so the parties share the responsibility to employ the rules in the same way. Most lawyers and parties cooperate to achieve these ends. But discussions of ways to improve the administration of civil justice regularly include pleas to discourage over-use, misuse, and abuse of procedural tools that increase cost and result in delay. Effective advocacy is consistent with — and indeed depends upon — cooperative and proportional use of procedure.
+\end{comment}
+
+Initially, document discovery was a mostly manual process conducted by teams of attorneys. 
+Team members would laboriously read through all the documents, marking them as important or otherwise with tags based on the document's relevance to the request. This method of search is now known as \textit{linear review}. 
 Baron et al.~\cite{baron2006trec} report that the review rates for different topics at the TREC 2006 Legal Track ranged from 12.3 to 67.5 documents per hour, and averaging 24.7. In 2007, the average review rate was around 20 documents per hour, and around 21.5 per hour in 2008~\cite{oard08}. Roitblat et al.~\cite{roitblat} reported that for a large-scale review, 225 attorneys were required to each work nearly 2,000 hours to review 1.6 million documents, at a rate of 14.8 documents per hour. Borden~\cite{borden} cites a review of ``fairly technical'' documents running at the rate of 45 documents per hour, and states 50 to 60 documents per hour as the ``e-discovery industry average.''
 
 The time required for linear  review depended on several factors relating to document
-collection, requests, and reviewer time. The typical review rate was a few minutes per document. As is to be expected, with the growth in size of the collection, such a review process becomes more and more insupportable. To remedy this issue a higher degree of automation is required.
-The  nuanced process of E-Discovery is summarized  by a widely-cited   EDRM Reference Model\footnote{http://www.edrm.net/resources/edrm-stages-explained}.  Starting from ``Information management'', where the intent is to incorporate all the information processing that is required by the organization before the e-discovery process starts, to ``Presentation'' on the right, which involves the production of the discovered materials to support a legal analysis. 
+collection, requests, and reviewer time. The typical review rate was a few minutes per document. As is to be expected, with the growth in size of the collection, such a review process becomes more and more impractical. To remedy this issue a higher degree of automation is required.
+The  process of E-Discovery is summarized  by a widely-cited EDRM Reference Model\footnote{http://www.edrm.net/resources/edrm-stages-explained}.  Starting from ``Information management'', where the intent is to incorporate all the information processing that is required by the organization before the e-discovery process starts, to ``Presentation'' which is
+the part of the process that  prepares   depositions, etc. 
+
+\begin{comment}
+TM: COVERED!
+Manny: "``Presentation'' on the right, which involves the production of the discovered materials to support a legal analysis." Analysis and Presentation are not really related to production.  Usually opposing counsel receives a production from the defendant. Then they use tools to analyze the data they received and to "trial presentation software" (PowerPoint as a simple example) to prepare for depositions, etc.  See EDRM stages for more information:
+http://www.edrm.net/projects/metrics/utbms
+It's also important to note that the EDRM is not a linear process that starts on the left and goes to the right (it rarely does).  That's why the model has back arrows in addition to forward arrows.
+See the 2014 EDRM model:  http://www.edrm.net/resources/edrm-diagrams-a-history
+\end{comment}
+
 
 The LexisNexis experience is that
 ``Document search'' represents 60 to 80\% of the total  cost. Hence, this
@@ -228,7 +239,7 @@ work focused on improving that search capability.
 \section{Process Lessons}
 This reviews BigSE's  infrastructure
 and week-to-week working.  Some of the lessons listed in this section will not
-suprise those already familiar with Big  Data projects. We present
+surprise those already familiar with Big  Data projects. We present
 them nevertheless since, if the
 reader wants to propose something like BigSE to their organization, 
 then  their management might find the process lessons of
@@ -238,18 +249,14 @@ most relevant.
 
 \subsection{Hardware}
 
-Modern Big Data
- infrastructures make it possible to offer a
- faster series of conclusions to industrial partners.
+Modern Big Data infrastructures make it possible to offer a faster series of conclusions to industrial partners.
 For example, using BigData tools,
 NcState was able to maintain the interest
 of LexisNexis engineers with a continual stream of
-weekly innovations and other results. 
- BigSE students run their experiments on the   NcState
+weekly innovations and other results. BigSE students run their experiments on the   NcState
 High Performance Computing facility (HPC is a network of 10,000 machines with 2 to 8 cores on each).
-A standard run for us is a 10 times repeat cross-validation experiment where data
-5 variants of a learner are run over 16 data sets. Depending on how large
-is the data and how slow is the learner, such a run can take hours to days to 
+A standard run for us is a 25 times repeat cross-validation experiment where data
+5 variants of a learner are run over 25 data sets. Depending on the size of the data and the speed of the learner, such a run can take hours to days to 
 terminate on a single machine.  However, on HPC, that same run terminate in times
 as short as 30 minutes. Note that it took a few
 weeks of script tweaking before we take full   advantage
@@ -262,9 +269,31 @@ more conclusions, sooner.
 \includegraphics[width=3.5in]{fig/example.png}
 \caption{Example Stackoverflow.com data used in this work.}\label{fig:example}
 \end{figure}
-\subsection{A ``Mock'' Data Generator}
-An useful   tool built  early in the project was  a ``mock'' data generator  built by LexisNexis that generated   data  
-representative of the kinds of data they see in their industrial practice. 
+\subsection{Domain Sampling Materials}
+At the start of the project, LexisNexis spent some effort
+building and presenting training materials to 
+introduce NcState to their business domains.
+
+Those materials were of two forms. Firstly,
+at the first four weekly 
+meetings, LexisNexis presented slides 
+describing the business
+domain within which the text mining was to occur. 
+These briefings were important in learning what
+mattered, and what did not matter, to the industrial
+client.
+\begin{lesson}
+In an industrial/academic
+relationship, it will take
+some time for the industrial
+partner to explain the details
+of their business to an academic partner. 
+\end{lesson}  
+
+The second form of materials that was important
+to this project was a  ``mock'' data generator.
+This ``mock'', built by LexisNexis, generated   data  
+representative of the kinds of data seen in industrial practice. 
 Given a random number seed, this ``mock'' pulled
 data from Stackoverflow.com (e.g. see \fig{example})
 and built
@@ -272,30 +301,30 @@ a data set  containing the attribute
 and class distributions seen in current LexisNexis E-Discovery work.
 
 The importance of the ``mock'' was three-fold. Firstly, it gave NcState ready access to large
-numbers of data sets. Secondly, when we reported results, it gave LexisNexis confidence
+numbers of non-confidential data sets. Secondly, when we reported results, it gave LexisNexis confidence
 our methods would work on their kind of data.
 Thirdly, the LexisNexis ``mock'' taught  NcState about the unique features of
 the problems faced during E-Discovery.
 Much of the literature on text mining Stackoverflow.com
-assumes ``NClass'' while the data relevant to E-Discovery
-is ``2Class'', which we characterize as follows:
+assumes ``tag-level'' while the data more relevant to E-Discovery
+is ``site-level'', which we characterize as follows:
 \bi
 \item
-{\bf NClass}:   Each data set contains  thousands of posts. The title and body of the posts are concatenated to form the independent variables for classification. The first tag for the posts are treated as the class of the post. Since many classes have such a small population, only the classes with top 19 population are kept while all the other classes are combined into one single class 'others'.
+{\bf Tag-level}:   Each data set contains  thousands of posts. The title and body of the posts are concatenated to form the independent variables for classification. The first tag for the posts is treated as the class of the post. In each data set, one specific tag is selected as the ``relevant'' class and all other tags are considered as ``irrelevant'' class.
 \item
-{\bf 2Class}: generated from the LexisNexis ``mock''
-which was  a two-class data set comprising 2000 emails
+{\bf Site-level}: generated from the LexisNexis ``mock'', 
+which produces a two-class data set comprising 20000 threads, where
  ``relevant''
-examples were 2 to 6\% of the data.
+examples from one specific sub-site were 2 to 6\% of the data. The task of site-level prediction is to predict which sub-site a test example belongs to, instead of tag.
 \ei
-The 2Class/NClass distinction is important since much of
+The site-level/tag-level distinction is important since much of
 the text mining literature on Stackoverflow.com is
-aimed something other than 2Class~\cite{moharanatag,stanley2013predicting,kuo2011word}. For example, Clayton and Byrne, 2013 \cite{stanley2013predicting} have worked on StackOverflow NClass prediction of tags and developed an ACT-R inspired Bayesian probabilistic model. This approach achieves a $65\%$ of accuracy by choosing the tag that has the highest log odds of being correct, given the tag's prior log odds of occurrence and adjusting for the log likelihood ratio of the words in the post being associated with the tag.
+aimed at tag-level tasks~\cite{moharanatag,stanley2013predicting,kuo2011word}. For example, Clayton and Byrne, 2013 \cite{stanley2013predicting} have worked on StackOverflow tag prediction and developed an ACT-R inspired Bayesian probabilistic model. This approach achieves a $65\%$ of accuracy by choosing the tag that has the highest log odds of being correct, given the tag's prior log odds of occurrence and adjusting for the log likelihood ratio of the words in the post being associated with the tag.
 For another example,  see also Kuo, 2011 \cite{kuo2011word}'s work on predicting the next word in a corpus-- which is an interesting
-task but not one relevant to E-Discovery.
+task but not relevant to E-Discovery.
 
 
-In the following, we show that   focusing on 2Class,
+In the following, we show that focusing on site-level,
 lets us find better choices for text mining this particular
 kinds of data. Hence:
 \begin{lesson}
@@ -304,7 +333,8 @@ of the data set used in a particular context.
 \end{lesson}  
 \begin{lesson}
 After sorting out the CPU farm, the next  important task is to
-build a ``mock'' data generator.
+build a ``mock''   generator for data that is representative of the specific
+target domain.
 \end{lesson} 
 
 
@@ -318,36 +348,36 @@ All students and faculty involved in BigSE
  here was not particularly restrictive. Researchers at NcState agreed not to share confidential
  information gained from LexisNexis as well as being somewhat circumspect in their publications
  (e.g. showing LexisNexis engineers drafts of any paper and asking for comments and/or
- corrections).  In return, NcState agreed to base all their analysis of   publicly
+ corrections).  In return, NcState agreed to document all their analysis of   publicly
  available data sets and tools, shared with LexisNexis engineers in private Github repositories.  The ease
  with which these NDAs were developed taught us that:
  \begin{lesson}
 Corporate confidentiality is an important
-concern, but it need not   stifle
+concern, but it does not need  to  stifle
 industry/research interactions regarding Big Data.
 \end{lesson} 
 \begin{lesson}
-Use of open source tools and data smooths interaction
+Use of open source tools and data aids collaborative interactions
 between industry and academia.
 \end{lesson}
  \subsubsection{Use of Github}
 The Github repositories proved useful in several  ways.
 Firstly,
  LexisNexis  engineers have immediate and ready access to 
- any interesting methods created by NcState. 
+ any interesting methods and/or findings created by NcState. 
 Secondly,
-rather than wasting time writing Powerpoint slides, NcState students could
+rather than wasting time writing PowerPoint slides, NcState students could
 report their results using the Markdown tools within the Github issue
-report systems
-Thirdly, using Github, LexisNexis developers could monitor and give very
+report systems.
+Thirdly, using Github, LexisNexis developers could monitor and provide
 quick feedback on the NcState code and issues,
 as they arose.
 Lastly, and perhaps more importantly for building
 a trusting relationship,
-LexisNexis could see consistent effort on the part on NcState. SeLAB members
+LexisNexis could see consistent effort on the part of NcState. SeLAB members
 are urged to do all their planning and coding and task management in Github.
 This gives LexisNexis an accurate appreciate for all the work conducted
-by the grduate students.
+by the graduate students.
  \begin{lesson}
 Github tremendously simplifies  industry/ academia communication for projects
 that make extensive use of prototyping.
@@ -361,15 +391,15 @@ joined the project as part of their research hours subjects. In all, BigSE is
 now staffed by six graduate Ph.D. students who sit in adjacent cubicles and who
  share their coding tools and tricks. 
 
-Newcomers to BigSE given some analysis task
- that the team has previously completed and asked to ``reproduce this''. For
+Newcomers to BigSE are given analysis tasks
+ that the team has previously completed and asked to reproduce the results or challenge them. For
  that initial study, they have access to all prior code written by the team
- and their challenge is to understand the parts and assemble them into some working
+ and their challenge is to understand the parts and assemble them into a working
  whole. 
  
-  LexisNexis and NcState meet each week to present results. That meeting includes
+  LexisNexis and NcState meet each week to present and review the results. That meeting includes
 a round robin session where each graduate student is asked to show some results,
-or say ``pass''. This session imposes some peer pressure on the students to achieve
+or say ``pass''. This session imposes some competetive pressure on the students to achieve
 results in order to ``show off'' in front of their peers and in front of the
 LexisNexis engineers. Not every student is expected to have something to show each week,
 but it becomes abundantly  clear within the overall team if some student is ``passing'' all
@@ -381,19 +411,18 @@ the time.
  with  more experienced people:
   \begin{lesson}
 With the right support structures, novice
-Big Data gradaute students
+Big Data graduate students
 can become productive in two to three months.
 \end{lesson}
  \subsubsection{Schedule and Tasks}
 As to specific tasks, graduate students are assigned a mix of projects. Some are very short-term (e.g a one week
-study on the merits of TF*IDF vs shingling) and some are more medium to long-term
+study on the merits of TF*IDF vs term frequency) and some are more medium to long-term
 that can take weeks to months (e.g. literature reviews on entity recognition or
 active learning experiments). 
 
 Initially, to build trust between LexisNexis and NcState, the focus of the work was on very
 short term projects (weekly incremental reports). Now, the focus has changed and
-LexisNexis is prepared to discuss longer-term projects that might take months (or even
-years) to complete.  Hence we recommend:
+LexisNexis is prepared to discuss longer-term projects that deliver incremental value, that may yet take months to complete.  Hence we recommend:
 \begin{lesson}
 Initially, build trust with   short-term goals,
 then expand   later.
@@ -426,7 +455,7 @@ the seven page limit of this paper, we focus here on the
 classification work. 
 Note that the following results are not a claim that the
 best way to do all text mining is via the methods
-championed below. Rather, we say that for the specific 2Class
+championed below. Rather, we say that for the specific site-level
 problem explored by LexisNexis for the E-Discovery work,
 the following choices have been found to be useful. For other
 kinds of data, we would recommend further study to find
@@ -436,7 +465,7 @@ the results that work best for those other kinds of data.
 \begin{comment}
 \subsection{Improving over the baseline}
 Prior to BigSE,
-the baseline LexisNexis text miner for 2Class data was:
+the baseline LexisNexis text miner for site-level data was:
 \bi
 \item Tokenize with the {\em stemming} and {\em stop words};
 \item Featurize with {\em term frequencies};
@@ -472,25 +501,63 @@ For the purpose of studying both precision and recall, we use:
  \mbox{$F_{1}=  2pr/(p+r)$}
 as  our  performance metric.
 
-
-
-
 \subsection{Standard Experiment}
-
-A standard experiment for the  BigSE
-classification experiments are a  5 by 5 cross-validation ($20\%$ as training sample and $80\%$ as testing sample since in real tasks, the training sample is always less). 
-This rig was applied to 5 NClass problems and 10 2Class problems (using an SVM
+%-----
+%
+Starting with  LexisNexis' default
+settings to their text miners (stemming and stop words removal for tokenizer, term frequency for featurization, hashing trick for dimensionality reduction, L2 normalization on rows for normalization, linear SVM for classifier), we
+ modified one option at a time (e.g. swapped the hashing trick for Tf*idf).
+Different options in a single process (e.g. hashing trick and TF-IDF selection in dimensionality reduction) were compared in each experiment with 5 by 5 cross-validation ($20\%$ as training sample and $80\%$ as testing sample since in real tasks, the training sample is always less). 
+This rig was applied to 10 tag-level problems and 15 site-level problems (using an SVM
 with a linear kernel as the classifier).
 
+\subsection{Comment on External Validity}
+
+% Move up
+
+There are several validity threats to the design of this study: 
+
+\textbf{a)} The above experiments show results from a
+limited number of text mining methods.
+The space of known text mining methods is truly vast
+and the following studies represent just a small portion of the total space.
+
+ 
+\textbf{b)} All the above used data that we have characterized as tag-level or site-level samples
+from posts in Stackoverflow.com. For other kinds of data, we recommend repeating this
+analysis to find the right text mining methods for that kind of data.
+
+Due to these threats to external validity,   we make no presumption that the following conclusions work best   for all text mining applications. We only assert that the following   work better some
+alternatives 
+  in our domain.   
+  
+That said, we   assert that the following is   externally
+valid:
+\begin{lesson}
+Commercial organizations can outsource
+at least some of their 
+their validation work to university partners.
+\end{lesson}
+Further, within that validation
+process:
+\begin{lesson}
+The university partners can sometimes find
+better choices that those currently employed by the commercial
+organization (e.g. see the SMOTE results, below).
+\end{lesson}
+
+
+
+\subsection{  Results}
 The results are 
 presented in  Figure \ref{fig:all}.
 Three interesting results in those plots are listed below.
 
 {\em 1. Performance deltas:}  In Figure \ref{fig:all}, the
-NClass problems are shown on the left and the 2Class problems are
-shown on the right.  Our results exhibit a low valley on the left and higher plateau on the right which is to say that methods that work well for 2Class
-do not work well for NClass. This result underlines Lesson 2\&3 (above): it
-is important to select methods using data relevant to specific domains.
+tag-level problems are shown on the left and the site-level problems are
+shown on the right.  The results show a low valley on the left and higher plateau on the right; i.e.   methods that work well for site-level
+do not work well for tag-level. This result underlines Lesson 3\&4 on the 
+  importantance of testing via   data that is particular to specific domains.
  
 {\em 2. Low IQR:} In  Figure \ref{fig:all},
 the solid lines at the top show the median (50th percent) value
@@ -498,21 +565,23 @@ and the dotted lines at bottom show the IQR (the inter-quartile range calculated
 to zero; i.e. the variance in our conclusions across multiple samples is mostly
 very low. Hence:
 \begin{lesson}
-The performance variance is small enough to make  definitive statements about what methods work best for  2Class problems.
+The performance variance is small enough to make  definitive statements about what methods work best for  site-level problems.
 \end{lesson}
 
-{\em 3. Blurred results:} For three of the graphs, it is difficult to distinguish between   different results. Looking at Figure \ref{fig:all} (a) and (b) and (c), we conclude that the overall benefit of certain treatments is marginal.
+{\em 3. Blurred results:} Ig is difficult to distinguish between   some the  results since, looking at Figure \ref{fig:all} (a) and (b) and (c),   the overall benefit of certain treatments is marginal.
 That is:
 \begin{lesson}
 Not all standard text mining methods are  powerful or useful.
 \end{lesson}
 
-\subsection{Comments on Specific Results}
+The rest of this section discusses more specific results.
+
+
 \label{sect:Experiment}
 
 \subsubsection{Tokenization}
 
-Tokenization is the very first step in natural language processing. It removes the spirit of symbols by identifing the most basic units which need not to be decomposed in the subsequent processing \cite{webster1992tokenization}. 
+Tokenization is the very first step in natural language processing. It removes the spirit of symbols by identifying the most basic units which need not to be decomposed in the subsequent processing \cite{webster1992tokenization}. 
 \textbf{Shingling} introduces phrases as unit token. A word-based $w$-grams shingling captures contiguous sequences of words as unit tokens and each unit token has $w$ words \cite{chang2009using}. Bigram and trigram shingles uses w=2 and w=3-grams, respectively.
 \textbf{Stemming and stop words removal} combines words that have same meaning and removes  very frequently used words. An example of stemming and stop words removal 
 would be to convert ``i want to eat apple since i like eating apples'' to
@@ -529,11 +598,11 @@ While stemming and stop words are considered  an effective way to improve the te
  
 The   cost of these tokenizers is very low (each can be completed in a simple pass
 through the data) but their observed   benefit is small.
-As shown in Figure \ref{fig:pre}, the average improvement of stemming and stop words removal in median value is 1\% on NClass data  and 6\% on 2Class  data sets.
-Note that  deltas are very close the the median IQRS of 3\%,4\% for NClass,2Class (respectively).  Hence:
+As shown in Figure \ref{fig:pre}, the average improvement of stemming and stop words removal in median value is 1\% on tag-level data  and 6\% on site-level  data sets.
+Note that  deltas are very close to the IQRs of 3\%,4\% for tag-level,site-level (respectively).  Hence:
 \begin{lesson}
-Despite their prominence in the literature, the benefit of stemming and stopwords
-and shignling for our data sets  is minimal.
+Despite their prominence in the literature, the benefit of stemming and stop words
+and shingling for our data sets  is minimal.
 \end{lesson}
 
 
@@ -590,10 +659,8 @@ and shignling for our data sets  is minimal.
     otherwise specified, the learner here is an SVM with a linear kernel.
     In all these plots, {\em higher} lines mean {\em better} performance.
     Within each plot,  the solid lines (at top) are median scores and 
-    the dashed lines (at bottom) are inter-quartile ranges (75th-25th percentile). Also, five left-hand-side data sets are NClass
-    format while the remaining are 2Class data sets generated from
+    the dashed lines (at bottom) are inter-quartile ranges (75th-25th percentile). Also, except for Figure \ref{fig:fea_num} ten left-hand-side data sets are tag-level while the remaining are site-level data sets generated from
     our ``mock'' data generator.
-    Figure \ref{fig:all}~(d) 
     }
     \label{fig:all}
 \end{figure*}
@@ -602,14 +669,15 @@ and shignling for our data sets  is minimal.
 \subsubsection{Featurization}
 
 Featurization is the process which transforms the tokens of each document into a vector of weights of each unique token, which can be used to train the classifier~\cite{manning1999foundations}. 
-\textbf{Term frequency}, also known as word count \cite{manning1999foundations}.   would convert ``want eat apple since like eat apple'' to
-{\em \{eat: 2,\, apple: 2,\, want: 1,\, since: 2,\,like: 1\}}
-\textbf{Tf-idf weight }calculates not only the word count, but also the number of documents each token appears, calcuated as folows:
+\textbf{Term frequency}, also known as word count \cite{manning1999foundations}, would convert ``want eat apple since like eat apple'' to
+{\em \{eat: 2,\, apple: 2,\, want: 1,\, since: 1,\,like: 1\}}.
+\textbf{Tf-idf weight }calculates not only the word count, but also the number of documents each token appears, calculated as follows:
+
 \begin{equation}\label{eq:tfidf}
 \mathit{tfidf}(t, d) = |t  \in d| \cdot  log\left(\frac{|D|}{|d\in D: t\in d|}\right)
 \end{equation}
 where $D,T$ are all documents and tokens and $t\in T,d\in D$.
-The intution behind  Tf-idf   is that the more frequent a token appears and the less documents it appears in, the more important it is. Tf-idf  is  a popular feature for text categorization\cite{caropreso2001learner,moharanatag}. 
+The intuition behind  Tf-idf   is that the more frequent a token appears and the less documents it appears in, the more important it is. Tf-idf  is  a popular feature for text categorization\cite{caropreso2001learner,moharanatag}. 
 
 
 % \begin{figure}[ht]
@@ -634,16 +702,14 @@ data sets is minimal.
 %\end{figure}
 
 Dealing with the tables of data containing all the words in English, would mean processing a very large number of columns. A useful method for removing noise and reducing the 
-memory costs of learning is dimensionality reduction. In this approach,
-prior to classification, some numeric weight is given to each term and all terms withe that some threshold
-are removed. 
+memory costs of learning is dimensionality reduction. 
 
-Two methods for finding those weights are the {\em hasing trick} and {\ef Td-idf}.
+Two methods for finding those weights are the {\em hashing trick} and {\em Td-idf}.
 \textbf{Feature selection by tf-idf score}  sorts tokens by their tf-idf score (see \eq{tfidf}) then and picks the $N$ highest-scored tokens. 
-The \textbf{Hashing trick} is a single-parse method that turns features into 
+The \textbf{Hashing trick} is a single-pass method that turns features into 
 entries of in a matrix by applying a hash function to the features. The number of columns of the output matrix can be pre-defined and thus dimensionality reduction can be done by applying hashing trick \cite{weinberger2009feature}. For
 example,
-the hasing trick might convert {\em {\em \{eat: 2,\, apple: 2,\, want: 1,\, since: 2,\,like: 1\}}} into {\em \{3, 3, 1\}}.   
+the hashing trick might convert {\em {\em \{eat: 2,\, apple: 2,\, want: 1,\, since: 1,\,like: 1\}}} into {\em \{3, 3, 1\}}.   
 
 % \begin{figure}[ht]
 %   \includegraphics[width=\linewidth]{./fig/sel.eps}
@@ -652,9 +718,8 @@ the hasing trick might convert {\em {\em \{eat: 2,\, apple: 2,\, want: 1,\, sinc
 % \end{figure}
 
 Figure \ref{fig:fea_num}  shows a sample  of our results of using Td*idf to select for an increasing
-number of tokens (all the results are not shown due to space reasons). In all our data sets,
-no   additional benefit
-  was seen after using 4000 terms. 
+number of tokens (due to space reasons, not all the results are shown). In all our data sets,
+no additional benefit was seen after using 4000 terms. 
  
 
 
@@ -662,7 +727,7 @@ As shown in Figure \ref{fig:sel}, compares the results of the hashing trick with
 Tf*idf selecting for 4000 words. The differences of these two methods in median value is no bigger than the IQRs.  Hence:
 \begin{lesson}
 When reducing memory costs of storing our kind of text mining data in RAM,
-a simple hasing trick will suffice,
+a simple hashing trick will suffice,
 \end{lesson}
 
 % \begin{figure}[ht]
@@ -676,8 +741,8 @@ a simple hasing trick will suffice,
 
 Normalization is the process which adjust the values measured on different scales to a notionally common scale.
 
-\textbf{Normalization on columns} transforms a  value $x$ in a column to $(x - \mathif{min})/(\mathit{max} - \mathit{min})$ (where \mathit{min}, \mathit{max} come
-for that column).
+\textbf{Normalization on columns} transforms a  value $x$ in a column to $(x - \mathit{min})/(\mathit{max} - \mathit{min})$ (where $\mathit{min}$, $\mathit{max}$ come
+from that column).
  In general data mining tasks, the weight of different features are measured on different scales. Normalization on columns of the feature matrix eliminates these differences among features. 
 
 \textbf{L2 Normalization on rows} takes feature vector of each document and divide it by its L2 norm. It is the standard normalization method for text categorization \cite{frank2006naive}. The main purpose of implementing L2 normalization on rows is to rescale the vector of feature weights to unit length. 
@@ -695,9 +760,9 @@ $\sqrt{(3^2+3^2+1^2)}$ to produce $\{0.69,   0.69, 0.23\}$.
  
 
 As shown in Figure \ref{fig:norm}, column normalization offers little to no improvement
-over no nornamization. However, L2 Normalization can add up to 20\% of the $F_1$ score.
+over no normalization. However, L2 Normalization on rows can add up to 20\% of the $F_1$ score.
 \begin{lesson}
-Normalizing rows can be more   useful than normalizing columns.
+Normalizing rows can be more useful than normalizing columns.
 \end{lesson}
 
 
@@ -718,9 +783,9 @@ balancer to our data.
 %   \label{fig:balance}
 % \end{figure}
  
-As shown in Figure \ref{fig:balance}, the average improvement of SMOTE in median value is 22\% on Nclass data and 17\% of 2Class data. Note that, in these SMOTE experiments,
+As shown in Figure \ref{fig:balance}, the average improvement of SMOTE in median value is 22\% on tag-level data and 17\% of site-level data. Note that, in these SMOTE experiments,
 we SMOTEd the training set but the distributions in test set were left ``as is'',
-Also, the average IQR for that plot is  4\%,9\% on Nclass,2Class data; i.e. is much smaller than the median
+Also, the average IQR for that plot is  4\%,9\% on tag-level,site-level data; i.e. is much smaller than the median
 improvement. Hence we say:
 \begin{lesson}
 Class balancing (e.g. with SMOTE) is very useful for this kind of text mining.
@@ -729,15 +794,15 @@ Class balancing (e.g. with SMOTE) is very useful for this kind of text mining.
 
 \subsubsection{Classification}
 
-Classifier guess new labels using models built from prior data.
-\textbf{SVM} is a widely-used learning models for  many data mining 
-tasks~\cite{joachims2006training,moharanatag}. SVM's use
+Classifier guesses new labels using models built from prior data.
+\textbf{SVM} is a widely-used learning model for  many data mining 
+tasks \cite{joachims2006training,moharanatag}. SVM's use
 some {\em kernel} that maps the raw data into another space where the data might be more
-seperable. 
-Linear SVM is the simplest kenrel function but others include polynominal,
+separable. 
+Linear SVM is of the simplest kernel function but others include polynomial,
 radial bias, sigmoid, etc.
  
- There are many other kinds of classifiers.
+There are many other kinds of classifiers.
 \textbf{Naive Bayes} represents a family of simple probabilistic classifiers which has been studied extensively since 1950s. Multinomial Naive Bayes is especially designed for text categorization \cite{mccallum1998comparison} and always considered as a baseline method for text categorization. 
 
 \textbf{Decision Tree} learners are  a popular model for classification. CART is one implementation of decision tree learners that has been proved useful in prior text mining applications~\cite{miotto2005supporting}.
@@ -753,10 +818,10 @@ of classifiers. The results from that figure are very clear:
 linear SVM out-performs Naive Byes and decision tree learning
 (with CART).
  
-Figure \ref{fig:algms2} studies different the effect of different
-kernel functions on SVM. Note that linear SVM is the clear winner.
+Figure \ref{fig:algms2} studies the effect of different
+kernel functions in SVM. Note that linear SVM is the clear winner.
 \begin{lesson}
-Linear SVM is the recommended classifier for 2Class data.
+Linear SVM is the recommended classifier for site-level data.
 \end{lesson}
  
 
@@ -768,19 +833,7 @@ Linear SVM is the recommended classifier for 2Class data.
 
 
 
-\section{Validity}
 
-There are several validity threats to the design of this study: 
-
-\textbf{a)} The above experimentsshow results from a
-liimited number of text mining methods.
-The space of known text mining methods is truly vast
-and the above studies represent just a small portion of the total space.
-
- 
-\textbf{b)} All the above used data that we have characterized as Nclass or 2Class samples
-from posts in Stackoverflow.com. For other kinds of data, we recommend repeating this
-analysis to find the right text mining methods for that kind of data.
 
 
 
@@ -793,52 +846,51 @@ analysis to find the right text mining methods for that kind of data.
 
 
 This paper has listed the lessons learned from one the BigSE LexisNexis/NcState partnership.
-This lab has found that: 
-\bi
-\item 
-Most  of the operator choices made by LexisNexis are
+This lab has found that.
+most  of the operator choices made by LexisNexis are
   demonstrably better than many other choices.
-\item 
-But it some cases, NcState found     certain operators
-were much faster than others (e.g. required only a single pass
-of the data);
-\item
-And in one case, NcState showed that one operator (SMOTE) not currently
-used by LexisNexis offered large improvement in their text miners.
+However,  in some cases, NcState found certain operators
+much faster than others (e.g. required only a single pass
+of the data).
+Also, in one case, NcState showed that one operator (SMOTE) not currently
+used by LexisNexis offered useful improvements in their text miners.
 SMOTE is now scheduled for inclusion in the next release
 of the LexisNexis tools.
-\ei
-More specifically, for the 2Class problem that is relevant to
+
+More specifically, for the site-level problem that is relevant to
 LexisNexis' E-Discovery problem, BigSE recommends the following:
 \be
-\item \textbf{Tokenization:} Stemming and removal of stop words were generally useful. Bagging and shingling offered no noticeable benefits. 
-\item \textbf{Featurization:} Contrary to popular recommendation, just using term frequency (TF) proved to work just as well as using TF-IDF.
-\item \textbf{Normalization:} L2 normalization on rows was noticed be useful. No surprises hers, this adheres to the standard practice.
-\item \textbf{Dimensionality Reduction:} Given how there is no difference between TF and TF-IDF, using hashing trick in place of TF offered an added benefit of using fewer dimensions.
-\item \textbf{Data Balancing:} The low prevalence of "interesting" class in the test collection was handled remarkably well by SMOTE.
-\item \textbf{Classification:} Although SVM is considered a superior classifier for text mining applications, it was surprising to note that Linear SVM outperformed other kernels.
+\item \textbf{Tokenization:} Stemming and removal of stop words were generally useful. Shingling offered no noticeable benefits. 
+\item \textbf{Featurization:} Contrary to popular recommendation, term frequency (TF) proved to work just as well as using TF-IDF.
+\item \textbf{Normalization:}  Use L2 normalization on the rows.
+\item \textbf{Dimensionality Reduction:} Given how there is so little difference between hashing trick and TF-IDF, using  the hashing trick in place of TF-IDF offered an added benefit of needing fewer dimensions (and less memory) and taking less time (TF-IDF needs  two passes of the data);
+the hashing trick can be applied on each row, in a single pass
+of the data).
+\item \textbf{Data Balancing:} The low prevalence of "interesting" class in the test collection was handled   well by SMOTE.
+\item \textbf{Classification:}  It  was surprising to note that a simple Linear SVM outperformed other kernels.
 \ee
+As mentioned above,    we make no presumption that the above list of choices
+  works best for all text mining applications (but it
+  is a set of choices that work better than others,
+  in our domain).   As for other domains, we would recommend that organizations
+assemble their own validation team to find the best choices in those domains.
 
-
-
-The LexisNexis/NcState collaboration has proved useful
+The LexisNexis/NcState collaboration has been useful
 for both parties.
-LexisNexis got to explore a large range of text mining operators while
+LexisNexis got to explore more  text mining operators while
 NcState got to expose their research students to the
 realities of real-world industrial data mining.
- Further, BigSE has proved to be a pathway from
-research to employment (e.g. SeLAB  students  will work as    summer interns at  LexisNexis). 
+ Also, BigSE has proved to be a pathway from
+research to employment (e.g. BigSE  students  will work as    summer interns at  LexisNexis). 
 Based on  these results, LexisNexis management has extended the collaboration till the end of 2016 (and further work in 2017
 and beyond is begin discussed).
-
-
 
 As to future work, as mentioned  above, these studies have  explored only a small portion of the very large space of operators available in text mining.
 Our next phase is to explore automatic tuning methods that can explore that large space.
 In order to explore a larger decision space as well as avoiding local optimum, heuristic search algorithms such as differential evolution, GALE, and NSGA-II will be applied to tune the decisions for a better approach \cite{storn1997differential,krall2015gale,deb2002fast}. We are working on this to achieve both less number of comparisons and better solutions.
 
 Another useful future direction is
-active Learning.
+active learning.
 One constant challenge in the LexisNexis work is gaining access to labelled data. In theory,
 active learning could reduce the cost of humans reading and classifying documents during E-Discovery.
 For example  instead of 20\% of the data, only a thousand samples will be selected and then used for training. The performance of prediction will rely heavily on how representative the selected samples are, and active learning is the key method to achieve it \cite{tong2002support}. 
